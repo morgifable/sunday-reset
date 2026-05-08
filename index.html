@@ -7,129 +7,171 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Epilogue:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #faf8f4;
-    --surface: #ffffff;
-    --surface2: #f3f0ea;
-    --border: #e8e2d9;
-    --accent: #2d5a27;
-    --accent-light: #eaf3e8;
-    --accent2: #c8572a;
-    --accent2-light: #fdf0eb;
-    --text: #1a1a18;
-    --muted: #8a8579;
-    --soft: #b8b2a8;
-    --gold: #c9a84c;
-    --gold-light: #fdf6e8;
+    --bg: #faf8f4; --surface: #fff; --surface2: #f3f0ea; --border: #e8e2d9;
+    --accent: #2d5a27; --accent-light: #eaf3e8; --accent2: #c8572a; --accent2-light: #fdf0eb;
+    --text: #1a1a18; --muted: #8a8579; --soft: #b8b2a8; --gold: #c9a84c; --gold-light: #fdf6e8;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Epilogue', sans-serif;
-    min-height: 100vh;
-    padding: 0;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'Epilogue', sans-serif; min-height: 100vh; }
+  body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; }
+  .app { position:relative; z-index:1; max-width:500px; margin:0 auto; padding:28px 18px 80px; }
 
-  /* subtle paper texture */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 0;
-  }
+  /* hero */
+  .hero { margin-bottom:24px; }
+  .hero-eyebrow { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .hero-eyebrow::before,.hero-eyebrow::after { content:''; flex:1; height:1px; background:var(--border); }
+  h1 { font-family:'Playfair Display',serif; font-size:38px; line-height:1.05; color:var(--text); margin-bottom:6px; }
+  h1 span { color:var(--accent); font-style:italic; }
+  .hero-sub { font-size:14px; color:var(--muted); line-height:1.5; }
 
-  .app { position: relative; z-index: 1; max-width: 500px; margin: 0 auto; padding: 28px 18px 80px; }
+  /* tabs */
+  .tabs { display:flex; gap:6px; margin-bottom:20px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab-btn { flex-shrink:0; padding:7px 16px; border-radius:20px; border:1px solid var(--border); font-size:13px; font-weight:500; cursor:pointer; background:transparent; color:var(--muted); transition:all .15s; font-family:'Epilogue',sans-serif; }
+  .tab-btn.active { background:var(--text); color:var(--bg); border-color:var(--text); }
+  .tab-section { display:none; }
+  .tab-section.active { display:block; }
 
-  /* header */
-  .hero { margin-bottom: 28px; }
-  .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-  .hero-eyebrow::before, .hero-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  h1 { font-family: 'Playfair Display', serif; font-size: 38px; line-height: 1.05; color: var(--text); margin-bottom: 6px; }
-  h1 span { color: var(--accent); font-style: italic; }
-  .hero-sub { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  /* setup screen */
+  .setup-screen { display:flex; flex-direction:column; gap:16px; }
+  .setup-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px; }
+  .setup-card h3 { font-family:'Playfair Display',serif; font-size:18px; color:var(--text); margin-bottom:4px; }
+  .setup-card p { font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.5; }
+  .option-grid { display:flex; flex-direction:column; gap:8px; }
+  .option-btn { width:100%; padding:11px 14px; border-radius:10px; border:1.5px solid var(--border); background:var(--surface); font-size:14px; font-weight:500; color:var(--text); cursor:pointer; text-align:left; font-family:'Epilogue',sans-serif; transition:all .15s; display:flex; align-items:center; gap:10px; }
+  .option-btn:hover { border-color:var(--accent); background:var(--accent-light); }
+  .option-btn.selected { border-color:var(--accent); background:var(--accent-light); color:var(--accent); }
+  .option-btn .opt-icon { font-size:18px; flex-shrink:0; }
+  .option-btn .opt-label { flex:1; }
+  .option-btn .opt-check { width:18px; height:18px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:10px; color:transparent; transition:all .15s; }
+  .option-btn.selected .opt-check { background:var(--accent); border-color:var(--accent); color:white; }
+  .multi-note { font-size:11px; color:var(--muted); margin-bottom:8px; }
 
-  /* progress ring area */
-  .progress-area { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 18px; }
-  .ring-wrap { position: relative; width: 64px; height: 64px; flex-shrink: 0; }
-  .ring-wrap svg { transform: rotate(-90deg); }
-  .ring-bg { fill: none; stroke: var(--border); stroke-width: 5; }
-  .ring-fill { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.5s cubic-bezier(0.34,1.56,0.64,1); }
-  .ring-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-  .ring-pct { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1; }
-  .ring-done { font-size: 10px; color: var(--muted); }
-  .progress-meta h3 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
-  .progress-meta p { font-size: 13px; color: var(--muted); line-height: 1.4; }
-  .time-est { font-size: 12px; color: var(--gold); font-weight: 600; margin-top: 5px; display: flex; align-items: center; gap: 4px; }
+  /* toggle items (yes/no per checklist item) */
+  .toggle-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--surface); margin-bottom:6px; cursor:pointer; transition:all .15s; }
+  .toggle-item.off { opacity:.45; background:var(--surface2); border-color:transparent; }
+  .toggle-item .ti-icon { font-size:16px; flex-shrink:0; }
+  .toggle-item .ti-text { flex:1; font-size:13px; font-weight:500; color:var(--text); }
+  .toggle-item .ti-switch { width:36px; height:20px; border-radius:10px; background:var(--border); position:relative; transition:background .2s; flex-shrink:0; }
+  .toggle-item.on .ti-switch { background:var(--accent); }
+  .toggle-item .ti-knob { position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:white; transition:left .2s; box-shadow:0 1px 3px rgba(0,0,0,.15); }
+  .toggle-item.on .ti-knob { left:18px; }
 
-  /* phase blocks */
-  .phase { margin-bottom: 28px; }
-  .phase-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-  .phase-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-  .phase-icon.kitchen { background: var(--accent-light); }
-  .phase-icon.fridge { background: #e8f0fd; }
-  .phase-icon.snacks { background: var(--gold-light); }
-  .phase-icon.remove { background: var(--accent2-light); }
-  .phase-icon.gym { background: #f0e8fd; }
-  .phase-icon.mind { background: var(--surface2); }
-  .phase-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); }
-  .phase-time { margin-left: auto; font-size: 12px; color: var(--muted); background: var(--surface2); padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+  /* start btn */
+  .start-btn { width:100%; padding:15px; background:var(--accent); color:white; border:none; border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; font-family:'Epilogue',sans-serif; transition:all .2s; margin-top:8px; }
+  .start-btn:hover { background:#234a1f; }
+  .start-btn:disabled { opacity:.4; cursor:not-allowed; }
+
+  /* progress ring */
+  .progress-area { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:18px 20px; margin-bottom:24px; display:flex; align-items:center; gap:18px; }
+  .ring-wrap { position:relative; width:64px; height:64px; flex-shrink:0; }
+  .ring-wrap svg { transform:rotate(-90deg); }
+  .ring-bg { fill:none; stroke:var(--border); stroke-width:5; }
+  .ring-fill { fill:none; stroke:var(--accent); stroke-width:5; stroke-linecap:round; transition:stroke-dashoffset .5s cubic-bezier(.34,1.56,.64,1); }
+  .ring-text { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; }
+  .ring-pct { font-size:15px; font-weight:700; color:var(--text); line-height:1; }
+  .ring-done { font-size:10px; color:var(--muted); }
+  .progress-meta h3 { font-size:16px; font-weight:600; color:var(--text); margin-bottom:2px; }
+  .progress-meta p { font-size:13px; color:var(--muted); line-height:1.4; }
+  .time-est { font-size:12px; color:var(--gold); font-weight:600; margin-top:5px; }
+
+  /* phase */
+  .phase { margin-bottom:24px; }
+  .phase-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+  .phase-icon { width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .pi-kitchen { background:var(--accent-light); } .pi-remove { background:var(--accent2-light); } .pi-gym { background:#f0e8fd; } .pi-mind { background:var(--surface2); }
+  .phase-title { font-family:'Playfair Display',serif; font-size:19px; color:var(--text); flex:1; }
+  .phase-time { font-size:11px; color:var(--muted); background:var(--surface2); padding:3px 8px; border-radius:20px; }
 
   /* checklist item */
-  .item { display: flex; gap: 12px; align-items: flex-start; padding: 13px 14px; margin-bottom: 7px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; transition: all 0.2s; user-select: none; }
-  .item:active { transform: scale(0.98); }
-  .item.done { background: var(--surface2); border-color: transparent; }
-  .item.done .item-text { opacity: 0.4; text-decoration: line-through; }
-  .item.done .item-sub, .item.done .item-tip { opacity: 0.3; }
-  .item.done .item-tag { opacity: 0.3; }
-
-  /* remove items style differently */
-  .item.remove-item { border-color: #f5ddd6; background: #fffaf9; }
-  .item.remove-item.done { background: var(--surface2); border-color: transparent; }
-  .item.remove-item .check { border-color: var(--accent2); }
-  .item.remove-item.done .check { background: var(--accent2); border-color: var(--accent2); }
-
-  .check { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; transition: all 0.2s; background: transparent; }
-  .item.done .check { background: var(--accent); border-color: var(--accent); }
-  .check-icon { opacity: 0; font-size: 12px; color: white; font-weight: 700; transition: opacity 0.15s; }
-  .item.done .check-icon { opacity: 1; }
-
-  .item-content { flex: 1; min-width: 0; }
-  .item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-  .item-text { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.3; flex: 1; }
-  .item-tag { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 5px; letter-spacing: 0.05em; flex-shrink: 0; margin-top: 1px; }
-  .tag-easy { background: var(--accent-light); color: var(--accent); }
-  .tag-hard { background: var(--accent2-light); color: var(--accent2); }
-  .tag-fuel { background: #e8f0fd; color: #2a52a8; }
-  .tag-mind { background: #f0e8fd; color: #6a2ac8; }
-  .item-sub { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
-  .item-tip { font-size: 12px; color: var(--accent); background: var(--accent-light); border-radius: 6px; padding: 5px 8px; margin-top: 6px; line-height: 1.5; }
-  .item-tip.warn { color: var(--accent2); background: var(--accent2-light); }
+  .item { display:flex; gap:12px; align-items:flex-start; padding:12px 14px; margin-bottom:6px; border-radius:11px; border:1px solid var(--border); background:var(--surface); cursor:pointer; transition:all .2s; user-select:none; }
+  .item:active { transform:scale(.98); }
+  .item.done { background:var(--surface2); border-color:transparent; }
+  .item.done .item-text,.item.done .item-sub,.item.done .item-tip,.item.done .item-tag { opacity:.35; }
+  .item.done .item-text { text-decoration:line-through; }
+  .item.remove-item { border-color:#f5ddd6; background:#fffaf9; }
+  .item.remove-item.done { background:var(--surface2); border-color:transparent; }
+  .item.remove-item .check { border-color:var(--accent2); }
+  .item.remove-item.done .check { background:var(--accent2); border-color:var(--accent2); }
+  .check { width:22px; height:22px; border-radius:6px; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; transition:all .2s; background:transparent; }
+  .item.done .check { background:var(--accent); border-color:var(--accent); }
+  .check-icon { opacity:0; font-size:12px; color:white; font-weight:700; }
+  .item.done .check-icon { opacity:1; }
+  .item-content { flex:1; min-width:0; }
+  .item-top { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+  .item-text { font-size:14px; font-weight:500; color:var(--text); line-height:1.3; flex:1; }
+  .item-tag { font-size:10px; font-weight:700; padding:2px 7px; border-radius:5px; letter-spacing:.05em; flex-shrink:0; margin-top:1px; }
+  .tag-easy { background:var(--accent-light); color:var(--accent); }
+  .tag-hard { background:var(--accent2-light); color:var(--accent2); }
+  .tag-mind { background:#f0e8fd; color:#6a2ac8; }
+  .item-sub { font-size:12px; color:var(--muted); margin-top:3px; line-height:1.5; }
+  .item-tip { font-size:12px; color:var(--accent); background:var(--accent-light); border-radius:6px; padding:5px 8px; margin-top:6px; line-height:1.5; }
+  .item-tip.warn { color:var(--accent2); background:var(--accent2-light); }
 
   /* celebrate */
-  .celebrate { display: none; background: var(--accent); border-radius: 16px; padding: 22px 20px; margin-bottom: 24px; text-align: center; }
-  .celebrate.show { display: block; }
-  .celebrate-emoji { font-size: 32px; margin-bottom: 8px; }
-  .celebrate h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: white; margin-bottom: 4px; }
-  .celebrate p { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+  .celebrate { display:none; background:var(--accent); border-radius:16px; padding:22px 20px; margin-bottom:24px; text-align:center; }
+  .celebrate.show { display:block; }
+  .celebrate-emoji { font-size:32px; margin-bottom:8px; }
+  .celebrate h2 { font-family:'Playfair Display',serif; font-size:22px; color:white; margin-bottom:4px; }
+  .celebrate p { font-size:13px; color:rgba(255,255,255,.75); line-height:1.5; }
 
-  /* bottom actions */
-  .actions { display: flex; gap: 10px; margin-top: 28px; }
-  .btn-primary { flex: 1; background: var(--accent); color: white; border: none; border-radius: 12px; padding: 14px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Epilogue', sans-serif; transition: all 0.2s; }
-  .btn-primary:hover { background: #234a1f; }
-  .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 12px; padding: 14px 18px; font-size: 13px; cursor: pointer; font-family: 'Epilogue', sans-serif; transition: all 0.2s; }
-  .btn-secondary:hover { border-color: var(--soft); color: var(--text); }
+  /* summary */
+  .summary { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 18px; margin-top:20px; }
+  .summary h4 { font-size:13px; font-weight:600; color:var(--text); margin-bottom:10px; }
+  .summary-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; padding:5px 0; border-bottom:1px solid var(--border); }
+  .summary-row:last-child { border-bottom:none; }
+  .summary-row .s-label { color:var(--muted); }
+  .summary-row .s-val { font-weight:600; color:var(--accent); }
 
-  /* summary footer */
-  .summary { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-top: 20px; }
-  .summary h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
-  .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--border); }
-  .summary-row:last-child { border-bottom: none; }
-  .summary-row .s-label { color: var(--muted); }
-  .summary-row .s-val { font-weight: 600; color: var(--text); }
-  .summary-row .s-val.green { color: var(--accent); }
+  /* actions */
+  .actions { display:flex; gap:10px; margin-top:24px; }
+  .btn-primary { flex:1; background:var(--accent); color:white; border:none; border-radius:12px; padding:14px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Epilogue',sans-serif; transition:all .2s; }
+  .btn-primary:hover { background:#234a1f; }
+  .btn-secondary { background:transparent; border:1px solid var(--border); color:var(--muted); border-radius:12px; padding:14px 18px; font-size:13px; cursor:pointer; font-family:'Epilogue',sans-serif; }
+  .btn-secondary:hover { border-color:var(--soft); color:var(--text); }
 
-  @keyframes pop { 0% { transform: scale(0.7); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
-  .item.just-done .check { animation: pop 0.25s ease forwards; }
+  /* meal cards */
+  .section-label { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin:20px 0 10px; }
+  .section-label:first-child { margin-top:0; }
+  .meal-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; margin-bottom:12px; overflow:hidden; }
+  .meal-card-header { padding:14px 16px 10px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+  .meal-card-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--text); line-height:1.2; }
+  .meal-badge { font-size:10px; font-weight:700; padding:3px 8px; border-radius:6px; flex-shrink:0; }
+  .badge-b { background:var(--accent-light); color:var(--accent); }
+  .badge-s { background:var(--gold-light); color:#7a5c10; }
+  .badge-custom { background:#e8f0fd; color:#1a3a5c; }
+  .meal-card-body { padding:12px 16px; }
+  .macros { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+  .macro { font-size:11px; background:var(--surface2); border-radius:5px; padding:3px 7px; color:var(--muted); }
+  .macro strong { color:var(--text); }
+  .sub-label { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px; margin-top:10px; }
+  .sub-label:first-child { margin-top:0; }
+  .ing-list { font-size:13px; color:var(--muted); line-height:1.8; }
+  .ing-list span { display:block; }
+  .ing-list span::before { content:'·  '; }
+  .meal-steps { display:flex; flex-direction:column; gap:6px; margin-top:4px; }
+  .meal-step { display:flex; gap:10px; align-items:flex-start; }
+  .meal-step-num { min-width:20px; height:20px; border-radius:50%; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:var(--text); flex-shrink:0; margin-top:1px; }
+  .meal-step p { font-size:13px; color:var(--muted); line-height:1.55; }
+  .meal-tip { background:var(--accent-light); border-radius:7px; padding:7px 10px; font-size:12px; color:var(--accent); margin-top:8px; line-height:1.5; }
+
+  /* add recipe */
+  .add-recipe-form { background:var(--surface); border:1.5px dashed var(--border); border-radius:14px; padding:16px; margin-bottom:12px; }
+  .add-recipe-form h4 { font-size:14px; font-weight:600; color:var(--text); margin-bottom:12px; }
+  .form-field { margin-bottom:10px; }
+  .form-field label { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:4px; }
+  .form-field input, .form-field textarea, .form-field select { width:100%; padding:9px 11px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); font-size:13px; color:var(--text); font-family:'Epilogue',sans-serif; outline:none; transition:border .15s; }
+  .form-field input:focus, .form-field textarea:focus { border-color:var(--accent); background:white; }
+  .form-field textarea { resize:vertical; min-height:80px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .save-recipe-btn { width:100%; padding:10px; background:var(--accent); color:white; border:none; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Epilogue',sans-serif; transition:all .2s; }
+  .save-recipe-btn:hover { background:#234a1f; }
+  .delete-recipe-btn { position:absolute; top:10px; right:10px; width:24px; height:24px; border-radius:50%; border:1px solid var(--border); background:var(--surface2); color:var(--muted); font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .delete-recipe-btn:hover { background:var(--accent2-light); color:var(--accent2); border-color:var(--accent2); }
+  .meal-card { position:relative; }
+
+  @keyframes pop { 0%{transform:scale(.7)} 70%{transform:scale(1.15)} 100%{transform:scale(1)} }
+  .item.just-done .check { animation:pop .25s ease forwards; }
 </style>
 </head>
 <body>
@@ -141,382 +183,602 @@
     <p class="hero-sub">Make the right things effortless. Make the wrong things harder. One session — full week sorted.</p>
   </div>
 
-  <!-- Progress ring -->
-  <div class="progress-area">
-    <div class="ring-wrap">
-      <svg width="64" height="64" viewBox="0 0 64 64">
-        <circle class="ring-bg" cx="32" cy="32" r="27"/>
-        <circle class="ring-fill" id="ringFill" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="169.6"/>
-      </svg>
-      <div class="ring-text">
-        <div class="ring-pct" id="ringPct">0%</div>
-        <div class="ring-done" id="ringDone">0/28</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('reset',this)">Reset</button>
+    <button class="tab-btn" onclick="showTab('breakfast',this)">Breakfast</button>
+    <button class="tab-btn" onclick="showTab('snacks',this)">Snacks</button>
+  </div>
+
+  <!-- ===================== RESET TAB ===================== -->
+  <div id="reset" class="tab-section active">
+    <div id="setupView"></div>
+    <div id="checklistView" style="display:none"></div>
+  </div>
+
+  <!-- ===================== BREAKFAST TAB ===================== -->
+  <div id="breakfast" class="tab-section">
+    <div id="breakfastContent"></div>
+
+    <div class="section-label" style="margin-top:24px">Add your own breakfast recipe</div>
+    <div class="add-recipe-form">
+      <h4>➕ New breakfast idea</h4>
+      <div class="form-field">
+        <label>Recipe name</label>
+        <input type="text" id="bfName" placeholder="e.g. Egg white omelette with veg">
       </div>
-    </div>
-    <div class="progress-meta">
-      <h3 id="progressTitle">Let's get started</h3>
-      <p id="progressSub">Tap each task as you complete it</p>
-      <div class="time-est">⏱ ~75 mins total</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Protein (g)</label>
+          <input type="number" id="bfProtein" placeholder="e.g. 38">
+        </div>
+        <div class="form-field">
+          <label>Calories</label>
+          <input type="number" id="bfCalories" placeholder="e.g. 350">
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Ingredients (one per line)</label>
+        <textarea id="bfIngredients" placeholder="200g egg whites&#10;1 red pepper&#10;Handful spinach"></textarea>
+      </div>
+      <div class="form-field">
+        <label>Method / notes</label>
+        <textarea id="bfMethod" placeholder="How to prep on Sunday and assemble in the morning..."></textarea>
+      </div>
+      <button class="save-recipe-btn" onclick="saveCustomRecipe('breakfast')">Save breakfast recipe</button>
     </div>
   </div>
 
-  <div class="celebrate" id="celebrateBox">
-    <div class="celebrate-emoji">🌿</div>
-    <h2>Week sorted. You're set.</h2>
-    <p>Everything is prepped, the friction is gone, and the wrong things are out of reach. Go enjoy the rest of your Sunday.</p>
-  </div>
+  <!-- ===================== SNACKS TAB ===================== -->
+  <div id="snacks" class="tab-section">
+    <div id="snacksContent"></div>
 
-  <!-- PHASE 1: KITCHEN PREP -->
-  <div class="phase">
-    <div class="phase-header">
-      <div class="phase-icon kitchen">🍳</div>
-      <div class="phase-title">Kitchen prep</div>
-      <div class="phase-time">~35 mins</div>
-    </div>
-
-    <div class="item" data-id="k1" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Cook & shred chicken breast (4–5 portions)</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Season with garlic powder, salt, pepper. Bake at 200°C for 22 mins or poach. Shred with two forks. Portion into 5 small containers — one per day.</div>
-        <div class="item-tip">Covers: frittata all week + any high-protein lunch add-on.</div>
+    <div class="section-label" style="margin-top:24px">Add your own snack idea</div>
+    <div class="add-recipe-form">
+      <h4>➕ New snack idea</h4>
+      <div class="form-field">
+        <label>Snack name</label>
+        <input type="text" id="snName" placeholder="e.g. Rice cakes with PB2">
       </div>
-    </div>
-
-    <div class="item" data-id="k2" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Make big batch shakshuka turkey sauce</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Brown 400g turkey mince. Add 400ml passata, garlic, cumin, smoked paprika, chilli flakes, salt. Simmer 10 mins. Divide into 4 containers.</div>
-        <div class="item-tip">Covers: 4 shakshuka breakfasts. Morning effort = reheat + crack 2 eggs. Done in 6 mins.</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Protein (g)</label>
+          <input type="number" id="snProtein" placeholder="e.g. 15">
+        </div>
+        <div class="form-field">
+          <label>Calories</label>
+          <input type="number" id="snCalories" placeholder="e.g. 200">
+        </div>
       </div>
-    </div>
-
-    <div class="item" data-id="k3" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Make big batch British beans & veg base</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Cannellini beans + passata + heaps of spinach, courgette, mushrooms, peppers, garlic. Season with smoked paprika, Worcester sauce, ACV. Simmer 15 mins. Portion into 4–5 containers.</div>
-        <div class="item-tip">Your highest fibre breakfast — most filling, best for blood sugar stability all morning.</div>
+      <div class="form-field">
+        <label>Ingredients & method</label>
+        <textarea id="snMethod" placeholder="What goes in it and how to make/prep it..."></textarea>
       </div>
+      <button class="save-recipe-btn" onclick="saveCustomRecipe('snack')">Save snack recipe</button>
     </div>
-
-    <div class="item" data-id="k4" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Make protein cookie dough batch</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Chocolate protein powder + PB2 paste + oat flour + oat milk + pinch salt + dark choc chips. Mix, roll into balls, refrigerate in a container.</div>
-        <div class="item-tip">Your 3pm binge buffer. Making it now means it's there before the craving — not after.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="k5" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Mix dry snack jar (PB2 + psyllium + cinnamon)</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">5 tbsp PB2 + 5 tsp psyllium husk + 2 tsp cinnamon + tiny pinch salt. Mix in a small jar. Label it "3pm snack mix".</div>
-        <div class="item-tip">One scoop into yoghurt each day. Zero decisions, zero measuring, one minute to make your snack.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PHASE 2: FRIDGE SETUP -->
-  <div class="phase">
-    <div class="phase-header">
-      <div class="phase-icon fridge">🥗</div>
-      <div class="phase-title">Fridge setup</div>
-      <div class="phase-time">~15 mins</div>
-    </div>
-
-    <div class="item" data-id="f1" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Halve cherry tomatoes & store in container</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">One container covers the full week of frittatas. Grab a handful each morning.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="f2" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Crumble feta into a jar</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Pre-crumbled and ready to scatter. Saves you tearing open a packet every morning.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="f3" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Slice spring onions & portion smoked salmon</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Slice the whole bunch of spring onions at once. Divide smoked salmon into daily portions — clingfilm wrapped or in small bags.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="f4" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Portion daily Greek yoghurt containers</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">200g per container × 5. Stack in fridge at eye level — right at the front. Your 3pm snack is literally the first thing you see.</div>
-        <div class="item-tip">Eye level = grab first. This is environment design, not willpower.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="f5" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Label & arrange all containers front-to-back</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Monday → front. Friday → back. You always grab the front container — no thinking, no choosing.</div>
-        <div class="item-tip">Sounds fussy. Saves a decision every single morning for 5 days.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="f6" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Freeze raspberries (top up if needed)</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Keep a bag of frozen raspberries stocked. They go straight from freezer to yoghurt bowl — no thawing needed, creates a natural jammy swirl.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="f7" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Fill 3 water bottles & put in fridge</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Cold water is easier to drink than warm. Having it ready removes the "I'll drink more water" intention-to-action gap. 2.5L daily target = roughly 3 standard bottles.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PHASE 3: REMOVE THE WRONG THINGS -->
-  <div class="phase">
-    <div class="phase-header">
-      <div class="phase-icon remove">🚫</div>
-      <div class="phase-title">Remove friction — wrong things harder</div>
-      <div class="phase-time">~10 mins</div>
-    </div>
-
-    <div class="item remove-item" data-id="r1" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Remove biscuits & chocolate from desk area</div><div class="item-tag tag-hard">HARD ↑</div></div>
-        <div class="item-sub">Move to a high shelf, a different room, or don't buy them this week. Out of sight dramatically reduces impulsive eating — the craving needs proximity to act on it.</div>
-        <div class="item-tip warn">Don't rely on willpower. Rely on distance. If it takes 10 steps to get, you'll often not bother.</div>
-      </div>
-    </div>
-
-    <div class="item remove-item" data-id="r2" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Move sweet snacks to highest shelf or out of eyeline</div><div class="item-tag tag-hard">HARD ↑</div></div>
-        <div class="item-sub">If others in the house buy sweet food, ask them to keep it in a specific cupboard you don't open. You don't need to ban it — just make it require a deliberate choice, not a reflexive grab.</div>
-      </div>
-    </div>
-
-    <div class="item remove-item" data-id="r3" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Delete or move food delivery apps off your home screen</div><div class="item-tag tag-hard">HARD ↑</div></div>
-        <div class="item-sub">Move Uber Eats, Deliveroo etc to a folder on the last screen. One extra tap is often enough friction to stop an impulsive order during an emotional moment.</div>
-        <div class="item-tip warn">Don't delete — just relocate. The goal is a pause, not a ban.</div>
-      </div>
-    </div>
-
-    <div class="item remove-item" data-id="r4" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Put your 3pm snack at eye level — front of fridge</div><div class="item-tag tag-hard">HARD ↑</div></div>
-        <div class="item-sub">Make the right choice the obvious choice. When you open the fridge at 3pm, the first thing you see is your yoghurt bowl, not something you'll regret.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PHASE 4: GYM & MOVEMENT SETUP -->
-  <div class="phase">
-    <div class="phase-header">
-      <div class="phase-icon gym">👟</div>
-      <div class="phase-title">Gym & movement setup</div>
-      <div class="phase-time">~5 mins</div>
-    </div>
-
-    <div class="item" data-id="g1" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Put walking shoes by your desk (not in another room)</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">The #1 reason people skip the break walk is not laziness — it's friction. Shoes already on your feet means the walk starts the moment you stand up.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="g2" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Pack gym bag & leave it by the door</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Packed bag = no decision barrier on gym days. Decide tonight which 3 days this week you're training and pack accordingly.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="g3" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Choose your walk podcast or playlist for the week</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Pick one show or playlist that's only for walking. Download episodes for offline. The anticipation of hearing it becomes part of the walk motivation.</div>
-        <div class="item-tip">Temptation bundling — you'll start looking forward to the walk because of what comes with it.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="g4" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Schedule 3 gym sessions in your calendar</div><div class="item-tag tag-easy">EASY ↑</div></div>
-        <div class="item-sub">Treat them like appointments. Decide now — don't leave it to "I'll go when I feel like it." Any 3 days work, just commit on Sunday.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PHASE 5: MIND & WEEK SETUP -->
-  <div class="phase">
-    <div class="phase-header">
-      <div class="phase-icon mind">🧠</div>
-      <div class="phase-title">Mind & week setup</div>
-      <div class="phase-time">~10 mins</div>
-    </div>
-
-    <div class="item" data-id="m1" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Review last week — one win, one lesson</div><div class="item-tag tag-mind">MIND</div></div>
-        <div class="item-sub">Not a full debrief. Just: what went well this week? What would I do differently? Write it down somewhere, even a voice note. Reflection without self-criticism.</div>
-        <div class="item-tip">Looking at your scan trend counts as a win check — you're already moving in the right direction.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="m2" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Identify this week's most stressful day</div><div class="item-tag tag-mind">MIND</div></div>
-        <div class="item-sub">Which day is most likely to trigger the binge? Plan now: have extra snacks prepped that day, schedule the 2pm walk as a hard block, and have a "if I feel overwhelmed I will..." statement ready.</div>
-        <div class="item-tip warn">Emotion eating is predictable when you look ahead. Plan the hard day before it arrives.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="m3" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Set a bedtime alarm for this week</div><div class="item-tag tag-mind">MIND</div></div>
-        <div class="item-sub">Not a wake-up alarm — a "start winding down" alarm. 30 mins before your target sleep time. Sleep is when lean mass is built and cortisol resets. Poor sleep makes the 3pm craving much worse.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="m4" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Take this week's progress measurement</div><div class="item-tag tag-mind">MIND</div></div>
-        <div class="item-sub">Waist measurement or progress photo — same time, same conditions. Don't rely on the scale alone. Your scan showed 44.5kg lean mass to protect — track what matters.</div>
-      </div>
-    </div>
-
-    <div class="item" data-id="m5" onclick="toggle(this)">
-      <div class="check"><span class="check-icon">✓</span></div>
-      <div class="item-content">
-        <div class="item-top"><div class="item-text">Write your intention for the week (one sentence)</div><div class="item-tag tag-mind">MIND</div></div>
-        <div class="item-sub">Not a goal list — one sentence. "This week I'm focusing on hitting my protein and doing both walks every day." Put it somewhere you'll see it: phone wallpaper, sticky note, wherever.</div>
-        <div class="item-tip">Specificity beats ambition. One clear focus beats five vague ones.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Summary -->
-  <div class="summary" id="summaryBox">
-    <h4>This week you've made it easy to...</h4>
-    <div class="summary-row"><span class="s-label">Eat 140g protein daily</span><span class="s-val green">✓ Prepped</span></div>
-    <div class="summary-row"><span class="s-label">Walk both breaks without thinking</span><span class="s-val green">✓ Shoes ready</span></div>
-    <div class="summary-row"><span class="s-label">Beat the 3pm sweet craving</span><span class="s-val green">✓ Snack in fridge</span></div>
-    <div class="summary-row"><span class="s-label">Hit 14k steps</span><span class="s-val green">✓ Podcast queued</span></div>
-    <div class="summary-row"><span class="s-label">Train 3× without a barrier</span><span class="s-val green">✓ Bag packed</span></div>
-  </div>
-
-  <div class="actions">
-    <button class="btn-primary" onclick="resetAll()">Reset for next Sunday</button>
-    <button class="btn-secondary" onclick="scrollTop()">↑ Top</button>
   </div>
 
 </div>
 
 <script>
-  const TOTAL = 28;
-  let done = new Set();
+// ─── DATA ──────────────────────────────────────────────────────────────────
 
-  function toggle(el) {
-    const id = el.dataset.id;
-    if (done.has(id)) {
-      done.delete(id);
-      el.classList.remove('done', 'just-done');
-    } else {
-      done.add(id);
-      el.classList.add('done', 'just-done');
-      setTimeout(() => el.classList.remove('just-done'), 300);
+const BUILT_IN_BREAKFASTS = [
+  {
+    id: 'shakshuka',
+    name: 'Chicken egg shakshuka',
+    protein: 44, calories: 390, carbs: 22, fat: 14,
+    prepTask: { id:'k_shak', text:'Make big batch shakshuka sauce', sub:'Passata + garlic + cumin + smoked paprika + chilli + salt. Simmer 10 mins. Add shredded chicken to each container. Divide into 4.', tip:'Morning = reheat + crack 2 eggs. Done in 6 mins.' },
+    sundayPrep: ['Passata + garlic + cumin + smoked paprika + chilli flakes + salt — simmer 10 mins','Add a portion of shredded meal prep chicken to each container','Divide into 4 containers and refrigerate'],
+    morning: ['Reheat one sauce + chicken portion in a small pan.','Make two wells. Crack 2 eggs in. Cover with a lid.','Cook 3–4 mins until whites are set. Serve with toasted rye.'],
+    tip: 'Uses your weekly meal prep chicken — zero extra cooking, full protein hit. 🔥'
+  },
+  {
+    id: 'beans',
+    name: "Sarah's cheesy beans on toast",
+    protein: 38, calories: 420, carbs: 45, fat: 10, fibre: 14,
+    prepTask: { id:'k_beans', text:"Make Sarah's cheesy beans base", sub:"Onion + red pepper + garlic + spices → cherry tomatoes + cannellini beans + Mutti sauce + white wine vinegar. Simmer 8 mins. Portion into 5 containers.", tip:'Highest fibre breakfast on the plan. Sets you up for the whole morning.' },
+    sundayPrep: ['200g cherry tomatoes + 200g Mutti sauce + 1 can cannellini beans','½ red onion + 1 red pepper + 1 tsp garlic paste + 2 tbsp tomato purée','¼ tsp smoked paprika + ⅛ tsp cumin + pinch basil, oregano, chilli','2.5 capfuls white wine vinegar + 250ml water','Simmer 8 mins until thick. Portion into 5 containers.'],
+    morning: ['Reheat one portion. Toast 2 slices sourdough or rye.','Top with beans, good grating of reduced fat cheese, fresh parsley.','Fry or poach 2 egg whites alongside.'],
+    tip: "Sarah's exact recipe 🙌 Highest fibre breakfast — keeps you full well past lunch."
+  }
+];
+
+const BUILT_IN_SNACKS = [
+  {
+    id: 'yoghurt',
+    name: 'Greek yoghurt protein bowl',
+    protein: 28, calories: 260, carbs: 24, fat: 6,
+    ingredients: ['200g Greek yoghurt (2% fat)','1 tbsp PB2 powder mixed to paste','80g frozen raspberries — straight from freezer','1 tsp psyllium husk · drizzle sugar-free maple syrup','Pinch cinnamon · tiny pinch salt'],
+    method: 'Mix PB2 paste + psyllium + cinnamon into yoghurt. Fold in frozen raspberries — jammy swirl in 5 mins. Drizzle maple syrup. Salt makes everything taste sweeter.',
+    tip: '⭐ Your go-to. Sweet, filling, high protein — hits the afternoon perfectly.'
+  },
+  {
+    id: 'cookiedough',
+    name: 'Protein cookie dough',
+    protein: 28, calories: 280, carbs: 22, fat: 8,
+    ingredients: ['1 scoop chocolate protein powder','2 tbsp PB2 mixed to paste','2 tbsp oat flour · 1–2 tbsp oat milk · pinch salt · dark choc chips'],
+    method: 'Mix all together until dough forms. Add oat milk slowly. Fold in choc chips. Roll into balls. Refrigerate. Makes ~4 days worth — batch Sunday.',
+    tip: '🍪 Batch on Sunday — ready before you need it all week.'
+  },
+  {
+    id: 'salmon',
+    name: 'Smoked salmon & cucumber bites',
+    protein: 20, calories: 160, carbs: 4, fat: 6,
+    ingredients: ['60g smoked salmon portioned daily','½ cucumber sliced into rounds','Squeeze of lemon'],
+    method: 'Slice cucumber and portion salmon on Sunday. At snack time: top each round with salmon + lemon.',
+    tip: '🥒 Savoury backup — fresh, zero cooking, high protein.'
+  }
+];
+
+const ALL_TASKS = {
+  k_chicken: { phase:'kitchen', text:'Cook & shred chicken breast (4–5 portions)', sub:'Season with Italian herbs, garlic powder, salt, lemon zest. Bake 200°C for 22 mins. Shred. Portion into 5 containers.', tip:'Covers shakshuka, lunches and dinners all week. One bake, everything sorted.', tag:'easy' },
+  k_cookie:  { phase:'kitchen', text:'Make protein cookie dough batch', sub:'Chocolate protein + PB2 paste + oat flour + oat milk + salt + choc chips. Mix, roll into balls, refrigerate.', tip:'Your planned afternoon snack — ready before you need it.', tag:'easy' },
+  k_snackjar:{ phase:'kitchen', text:'Mix dry snack jar (PB2 + psyllium + cinnamon)', sub:'5 tbsp PB2 + 5 tsp psyllium husk + 2 tsp cinnamon + tiny pinch salt. Mix in a small jar.', tip:'One scoop into yoghurt each day. Zero measuring.', tag:'easy' },
+  f_tomatoes:{ phase:'fridge',   text:'Halve cherry tomatoes & store in container', sub:'One container covers the full week. Grab a handful each morning.', tag:'easy' },
+  f_onions:  { phase:'fridge',   text:'Slice spring onions & prep salad veg', sub:'Slice the full bunch. Dice cucumber. Store separately.', tag:'easy' },
+  f_yoghurt: { phase:'fridge',   text:'Portion daily Greek yoghurt containers (5 × 200g)', sub:'200g per container. Stack at eye level — right at the front.', tip:'Eye level = grab first. Environment design, not willpower.', tag:'easy' },
+  f_label:   { phase:'fridge',   text:'Label & arrange containers front-to-back', sub:'Monday → front. Friday → back. Always grab the front container.', tip:'Saves a decision every morning for 5 days.', tag:'easy' },
+  f_raspberries:{ phase:'fridge',text:'Top up frozen raspberries', sub:'Straight from freezer to yoghurt bowl — no thawing needed.', tag:'easy' },
+  f_water:   { phase:'fridge',   text:'Fill 3 water bottles & put in fridge', sub:'Cold water is easier to drink. 2.5L target = roughly 3 bottles.', tag:'easy' },
+  r_desk:    { phase:'remove',   text:'Remove biscuits & chocolate from desk area', sub:'Move to a high shelf, different room, or don\'t buy this week.', tip:"Don't rely on willpower. Rely on distance.", tag:'hard', remove:true },
+  r_snacks:  { phase:'remove',   text:'Move sweet snacks to highest shelf', sub:"You don't need to ban it — just make it require a deliberate choice.", tag:'hard', remove:true },
+  r_apps:    { phase:'remove',   text:'Move food delivery apps off home screen', sub:'Move to a folder on the last screen. One extra tap = enough friction.', tip:'Don\'t delete — just relocate.', tag:'hard', remove:true },
+  r_eyeline: { phase:'remove',   text:'Put afternoon snack at eye level in fridge', sub:'First thing you see at 3pm is your planned snack.', tag:'hard', remove:true },
+  g_shoes:   { phase:'gym',      text:'Put walking shoes by your desk', sub:'Shoes already there = walk starts the moment you stand up.', tag:'easy' },
+  g_bag:     { phase:'gym',      text:'Pack gym bag & leave by the door', sub:'Decide tonight which 3 days you\'re training. No decision barrier.', tag:'easy' },
+  g_podcast: { phase:'gym',      text:'Choose your walk podcast or playlist', sub:'Walk-only show. Download for offline. You\'ll start looking forward to it.', tip:'Temptation bundling — one of the most effective habit tricks.', tag:'easy' },
+  g_calendar:{ phase:'gym',      text:'Schedule 3 gym sessions in your calendar', sub:'Any 3 days — treat them like appointments.', tag:'easy' },
+  m_review:  { phase:'mind',     text:'Review last week — one win, one lesson', sub:'What went well? What would I do differently? Voice note is fine.', tip:'Small consistent wins compound.', tag:'mind' },
+  m_hardday: { phase:'mind',     text:'Identify this week\'s most demanding day', sub:'Plan now: extra snacks prepped, 2pm walk blocked, have a "if I feel overwhelmed I will..." ready.', tip:'Challenging days are predictable when you look ahead.', tipWarn:true, tag:'mind' },
+  m_alarm:   { phase:'mind',     text:'Set a bedtime wind-down alarm', sub:'30 mins before target sleep time. Good sleep makes the whole week easier.', tag:'mind' },
+  m_measure: { phase:'mind',     text:'Take this week\'s progress measurement', sub:'Waist measurement or progress photo — same conditions each week.', tag:'mind' },
+  m_intention:{ phase:'mind',    text:'Write your intention for the week', sub:'"This week I\'m focusing on hitting my protein and doing both walks." Phone wallpaper, sticky note.', tip:'Specificity beats ambition. One clear focus.', tag:'mind' },
+};
+
+const PHASE_META = {
+  kitchen: { icon:'🍳', iconClass:'pi-kitchen', label:'Kitchen prep' },
+  fridge:  { icon:'🥗', iconClass:'pi-kitchen', label:'Fridge setup' },
+  remove:  { icon:'🚫', iconClass:'pi-remove',  label:'Remove friction — wrong things harder' },
+  gym:     { icon:'👟', iconClass:'pi-gym',      label:'Gym & movement setup' },
+  mind:    { icon:'🧠', iconClass:'pi-mind',     label:'Mind & week setup' },
+};
+
+// ─── STATE ──────────────────────────────────────────────────────────────────
+
+let state = {
+  view: 'setup', // 'setup' | 'checklist'
+  breakfast: null,
+  activeTasks: [],
+  done: new Set(),
+  customBreakfasts: [],
+  customSnacks: [],
+};
+
+function loadState() {
+  try {
+    const s = JSON.parse(localStorage.getItem('sunday_state') || '{}');
+    if (s.customBreakfasts) state.customBreakfasts = s.customBreakfasts;
+    if (s.customSnacks) state.customSnacks = s.customSnacks;
+    // Only restore checklist state if same day
+    const today = new Date().toDateString();
+    if (s.date === today && s.activeTasks && s.breakfast) {
+      state.breakfast = s.breakfast;
+      state.activeTasks = s.activeTasks;
+      state.done = new Set(s.done || []);
+      state.view = 'checklist';
     }
-    updateProgress();
-    save();
-  }
+  } catch(e) {}
+}
 
-  const messages = [
-    ["Let's get started", "Tap each task as you complete it"],
-    ["Good start 🌱", "Kitchen prep is the highest impact section"],
-    ["You're rolling 💪", "Fridge setup next — 15 mins"],
-    ["Halfway there ⚡", "Making the wrong things harder now"],
-    ["Almost done 🔥", "Mind setup is the final piece"],
-    ["Week sorted ✅", "Everything is in place — go enjoy your Sunday"],
-  ];
+function saveState() {
+  localStorage.setItem('sunday_state', JSON.stringify({
+    date: new Date().toDateString(),
+    breakfast: state.breakfast,
+    activeTasks: state.activeTasks,
+    done: [...state.done],
+    customBreakfasts: state.customBreakfasts,
+    customSnacks: state.customSnacks,
+  }));
+}
 
-  function updateProgress() {
-    const count = done.size;
-    const pct = Math.round((count / TOTAL) * 100);
-    const circumference = 2 * Math.PI * 27;
-    const offset = circumference - (pct / 100) * circumference;
-    document.getElementById('ringFill').style.strokeDashoffset = offset;
-    document.getElementById('ringPct').textContent = pct + '%';
-    document.getElementById('ringDone').textContent = count + '/' + TOTAL;
+// ─── SETUP SCREEN ──────────────────────────────────────────────────────────
 
-    const idx = Math.min(Math.floor(count / (TOTAL / 5)), 5);
-    document.getElementById('progressTitle').textContent = messages[idx][0];
-    document.getElementById('progressSub').textContent = messages[idx][1];
+function renderSetup() {
+  const allBreakfasts = [...BUILT_IN_BREAKFASTS, ...state.customBreakfasts];
+  const allTaskKeys = Object.keys(ALL_TASKS);
 
-    document.getElementById('celebrateBox').classList.toggle('show', count === TOTAL);
-  }
+  // Default selections
+  const sel = {
+    breakfast: state.breakfast || null,
+    tasks: new Set(state.activeTasks.length ? state.activeTasks : ['k_chicken','k_cookie','r_snacks','g_shoes','g_bag','m_review','m_hardday','m_alarm','m_measure','m_intention'])
+  };
 
-  function save() {
-    localStorage.setItem('sunday_done', JSON.stringify([...done]));
-    localStorage.setItem('sunday_date', new Date().toDateString());
-  }
+  function renderHTML() {
+    const bfOptions = allBreakfasts.map(b => `
+      <button class="option-btn ${sel.breakfast===b.id?'selected':''}" onclick="selBreakfast('${b.id}')">
+        <span class="opt-icon">🍳</span>
+        <span class="opt-label">${b.name}<br><span style="font-size:11px;color:var(--muted);font-weight:400">${b.protein}g protein · ${b.calories} kcal</span></span>
+        <span class="opt-check">✓</span>
+      </button>`).join('');
 
-  function resetAll() {
-    done.clear();
-    document.querySelectorAll('.item').forEach(el => el.classList.remove('done', 'just-done'));
-    updateProgress();
-    save();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function scrollTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // Load saved state (same day only)
-  const savedDate = localStorage.getItem('sunday_date');
-  if (savedDate === new Date().toDateString()) {
-    const saved = JSON.parse(localStorage.getItem('sunday_done') || '[]');
-    saved.forEach(id => {
-      done.add(id);
-      const el = document.querySelector(`[data-id="${id}"]`);
-      if (el) el.classList.add('done');
+    const tasksByPhase = {};
+    allTaskKeys.forEach(k => {
+      const t = ALL_TASKS[k];
+      if (!tasksByPhase[t.phase]) tasksByPhase[t.phase] = [];
+      tasksByPhase[t.phase].push(k);
     });
+
+    // Add dynamic breakfast prep task note
+    let breakfastPrepNote = '';
+    if (sel.breakfast) {
+      const bf = allBreakfasts.find(b=>b.id===sel.breakfast);
+      if (bf && bf.prepTask) {
+        breakfastPrepNote = `<div style="font-size:12px;color:var(--accent);background:var(--accent-light);border-radius:6px;padding:6px 10px;margin-bottom:8px">✓ Breakfast prep task auto-added: <strong>${bf.prepTask.text}</strong></div>`;
+      }
+    }
+
+    const taskToggles = Object.entries(tasksByPhase).map(([phase, keys]) => {
+      const meta = PHASE_META[phase];
+      const rows = keys.map(k => {
+        const t = ALL_TASKS[k];
+        const on = sel.tasks.has(k);
+        return `<div class="toggle-item ${on?'on':'off'}" onclick="toggleTask('${k}')">
+          <span class="ti-text">${t.text}</span>
+          <div class="ti-switch"><div class="ti-knob"></div></div>
+        </div>`;
+      }).join('');
+      return `<div style="margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">${meta.icon} ${meta.label}</div>
+        ${rows}
+      </div>`;
+    }).join('');
+
+    document.getElementById('setupView').innerHTML = `
+      <div class="setup-screen">
+        <div class="setup-card">
+          <h3>Which breakfast this week? 🍳</h3>
+          <p>Pick one — only that recipe will appear in your Breakfast tab and its prep task added to your checklist.</p>
+          <div class="option-grid">${bfOptions}</div>
+        </div>
+        <div class="setup-card">
+          <h3>This week's checklist ✅</h3>
+          <p>Toggle tasks on or off — only what you actually need this week.</p>
+          ${breakfastPrepNote}
+          <div class="multi-note">Tap to include or exclude each task</div>
+          ${taskToggles}
+        </div>
+        <button class="start-btn" id="startBtn" onclick="startChecklist()" ${!sel.breakfast?'disabled':''}>
+          ${sel.breakfast ? `Build my Sunday Reset (${sel.tasks.size + 1} tasks)` : 'Choose a breakfast first'}
+        </button>
+      </div>`;
+
+    // Re-attach onclick handlers since innerHTML replaced them
+    window.selBreakfast = function(id) {
+      sel.breakfast = id;
+      renderHTML();
+    };
+    window.toggleTask = function(k) {
+      if (sel.tasks.has(k)) sel.tasks.delete(k);
+      else sel.tasks.add(k);
+      renderHTML();
+    };
+    window.startChecklist = function() {
+      const bf = allBreakfasts.find(b=>b.id===sel.breakfast);
+      state.breakfast = sel.breakfast;
+      // Always include breakfast prep task
+      const tasks = [...sel.tasks];
+      if (bf && bf.prepTask && !tasks.includes(bf.prepTask.id)) {
+        tasks.unshift(bf.prepTask.id);
+        // Register it dynamically
+        ALL_TASKS[bf.prepTask.id] = { phase:'kitchen', text:bf.prepTask.text, sub:bf.prepTask.sub, tip:bf.prepTask.tip, tag:'easy' };
+      }
+      state.activeTasks = tasks;
+      state.done = new Set();
+      state.view = 'checklist';
+      saveState();
+      renderChecklist();
+      renderBreakfastTab();
+    };
   }
 
-  // Init ring
+  renderHTML();
+}
+
+// ─── CHECKLIST ─────────────────────────────────────────────────────────────
+
+function renderChecklist() {
+  const total = state.activeTasks.length;
+  const tasksByPhase = {};
+  state.activeTasks.forEach(k => {
+    const t = ALL_TASKS[k];
+    if (!t) return;
+    if (!tasksByPhase[t.phase]) tasksByPhase[t.phase] = [];
+    tasksByPhase[t.phase].push(k);
+  });
+
+  const phaseBlocks = Object.entries(tasksByPhase).map(([phase, keys]) => {
+    const meta = PHASE_META[phase];
+    const items = keys.map(k => {
+      const t = ALL_TASKS[k];
+      const isDone = state.done.has(k);
+      const tagClass = t.tag==='hard'?'tag-hard':t.tag==='mind'?'tag-mind':'tag-easy';
+      const tagLabel = t.tag==='hard'?'HARD ↑':t.tag==='mind'?'MIND':'EASY ↑';
+      const tipHTML = t.tip ? `<div class="item-tip${t.tipWarn?' warn':''}">${t.tip}</div>` : '';
+      return `<div class="item${isDone?' done':''}${t.remove?' remove-item':''}" data-id="${k}" onclick="toggleItem(this)">
+        <div class="check"><span class="check-icon">✓</span></div>
+        <div class="item-content">
+          <div class="item-top"><div class="item-text">${t.text}</div><div class="item-tag ${tagClass}">${tagLabel}</div></div>
+          <div class="item-sub">${t.sub}</div>
+          ${tipHTML}
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="phase">
+      <div class="phase-header">
+        <div class="phase-icon ${meta.iconClass}">${meta.icon}</div>
+        <div class="phase-title">${meta.label}</div>
+      </div>
+      ${items}
+    </div>`;
+  }).join('');
+
+  const estMins = Math.max(10, total * 3);
+
+  document.getElementById('checklistView').innerHTML = `
+    <div class="progress-area">
+      <div class="ring-wrap">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="27"/>
+          <circle class="ring-fill" id="ringFill" cx="32" cy="32" r="27"/>
+        </svg>
+        <div class="ring-text">
+          <div class="ring-pct" id="ringPct">0%</div>
+          <div class="ring-done" id="ringDone">0/${total}</div>
+        </div>
+      </div>
+      <div class="progress-meta">
+        <h3 id="progressTitle">Let's get started</h3>
+        <p id="progressSub">Tap each task as you complete it</p>
+        <div class="time-est">⏱ ~${estMins} mins total</div>
+      </div>
+    </div>
+    <div class="celebrate" id="celebrateBox">
+      <div class="celebrate-emoji">🌿</div>
+      <h2>Week sorted. You're set.</h2>
+      <p>Everything is prepped, the friction is gone. Go enjoy the rest of your Sunday.</p>
+    </div>
+    ${phaseBlocks}
+    <div class="summary">
+      <h4>This week you've made it easy to...</h4>
+      <div class="summary-row"><span class="s-label">Hit 125–145g protein daily</span><span class="s-val">✓ Prepped</span></div>
+      <div class="summary-row"><span class="s-label">Walk both breaks without thinking</span><span class="s-val">✓ Shoes ready</span></div>
+      <div class="summary-row"><span class="s-label">Stick to planned snacks</span><span class="s-val">✓ Made Sunday</span></div>
+    </div>
+    <div class="actions">
+      <button class="btn-primary" onclick="resetWeek()">Reset for next Sunday</button>
+      <button class="btn-secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
+    </div>`;
+
+  document.getElementById('setupView').style.display = 'none';
+  document.getElementById('checklistView').style.display = 'block';
+
   const circ = 2 * Math.PI * 27;
   document.getElementById('ringFill').style.strokeDasharray = circ;
-  document.getElementById('ringFill').style.strokeDashoffset = circ;
   updateProgress();
+}
+
+function toggleItem(el) {
+  const id = el.dataset.id;
+  if (state.done.has(id)) { state.done.delete(id); el.classList.remove('done','just-done'); }
+  else { state.done.add(id); el.classList.add('done','just-done'); setTimeout(()=>el.classList.remove('just-done'),300); }
+  updateProgress();
+  saveState();
+}
+
+const msgs = [
+  ["Let's get started","Tap each task as you complete it"],
+  ["Good start 🌱","Kitchen prep first — highest impact"],
+  ["You're rolling 💪","Keep going — you're making real progress"],
+  ["Halfway there ⚡","More than halfway done"],
+  ["Almost done 🔥","Nearly there — last few tasks"],
+  ["Week sorted ✅","Everything is in place — go enjoy your Sunday"],
+];
+
+function updateProgress() {
+  const total = state.activeTasks.length;
+  const count = state.done.size;
+  const pct = Math.round((count/total)*100);
+  const circ = 2*Math.PI*27;
+  const fill = document.getElementById('ringFill');
+  if (fill) { fill.style.strokeDasharray=circ; fill.style.strokeDashoffset=circ-(pct/100)*circ; }
+  const rp = document.getElementById('ringPct'); if(rp) rp.textContent=pct+'%';
+  const rd = document.getElementById('ringDone'); if(rd) rd.textContent=count+'/'+total;
+  const idx = Math.min(Math.floor(count/(total/5)),5);
+  const pt = document.getElementById('progressTitle'); if(pt) pt.textContent=msgs[idx][0];
+  const ps = document.getElementById('progressSub'); if(ps) ps.textContent=msgs[idx][1];
+  const cb = document.getElementById('celebrateBox'); if(cb) cb.classList.toggle('show',count===total);
+}
+
+function resetWeek() {
+  state.view = 'setup';
+  state.breakfast = null;
+  state.activeTasks = [];
+  state.done = new Set();
+  document.getElementById('checklistView').style.display='none';
+  document.getElementById('setupView').style.display='block';
+  saveState();
+  renderSetup();
+  renderBreakfastTab();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── BREAKFAST TAB ──────────────────────────────────────────────────────────
+
+function renderBreakfastTab() {
+  const allBreakfasts = [...BUILT_IN_BREAKFASTS, ...state.customBreakfasts];
+  const active = allBreakfasts.find(b=>b.id===state.breakfast);
+  let html = '';
+
+  if (!active) {
+    html = `<div style="text-align:center;padding:32px 16px">
+      <div style="font-size:32px;margin-bottom:8px">🍳</div>
+      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:6px">No breakfast selected yet</div>
+      <div style="font-size:13px;color:var(--muted)">Go to the Reset tab and choose your breakfast for the week first.</div>
+    </div>`;
+  } else {
+    const prep = active.sundayPrep ? active.sundayPrep.map(i=>`<span>${i}</span>`).join('') : '';
+    const morning = active.morning ? active.morning.map((s,i)=>`<div class="meal-step"><div class="meal-step-num">${i+1}</div><p>${s}</p></div>`).join('') : '';
+    const fibreHTML = active.fibre ? `<div class="macro"><strong>~${active.fibre}g</strong> fibre</div>` : '';
+    html = `<div class="section-label">This week — ${active.name}</div>
+    <div class="meal-card">
+      <div class="meal-card-header">
+        <div class="meal-card-title">${active.name}</div>
+        <div class="meal-badge ${active.custom?'badge-custom':'badge-b'}">${active.custom?'CUSTOM':'BREAKFAST'}</div>
+      </div>
+      <div class="meal-card-body">
+        <div class="macros">
+          <div class="macro"><strong>${active.protein}g</strong> protein</div>
+          <div class="macro"><strong>${active.calories}</strong> kcal</div>
+          ${active.carbs?`<div class="macro"><strong>${active.carbs}g</strong> carbs</div>`:''}
+          ${active.fat?`<div class="macro"><strong>${active.fat}g</strong> fat</div>`:''}
+          ${fibreHTML}
+        </div>
+        ${prep?`<div class="sub-label">Sunday prep</div><div class="ing-list">${prep}</div>`:''}
+        ${morning?`<div class="sub-label">Morning</div><div class="meal-steps">${morning}</div>`:''}
+        ${active.method?`<div class="sub-label">Method</div><div style="font-size:13px;color:var(--muted);line-height:1.6">${active.method}</div>`:''}
+        ${active.tip?`<div class="meal-tip">${active.tip}</div>`:''}
+      </div>
+    </div>`;
+  }
+
+  // Custom recipes
+  state.customBreakfasts.forEach(b => {
+    html += renderCustomCard(b, 'breakfast');
+  });
+
+  document.getElementById('breakfastContent').innerHTML = html;
+}
+
+// ─── SNACKS TAB ─────────────────────────────────────────────────────────────
+
+function renderSnacksTab() {
+  const all = [...BUILT_IN_SNACKS, ...state.customSnacks];
+  let html = '<div class="section-label">Afternoon snacks — prepped Sunday</div>';
+  all.forEach(s => {
+    const isCustom = !!s.custom;
+    const ings = s.ingredients ? s.ingredients.map(i=>`<span>${i}</span>`).join('') : '';
+    html += `<div class="meal-card" id="snack_${s.id}">
+      ${isCustom?`<button class="delete-recipe-btn" onclick="deleteCustomRecipe('snack','${s.id}')">✕</button>`:''}
+      <div class="meal-card-header">
+        <div class="meal-card-title">${s.name}</div>
+        <div class="meal-badge ${isCustom?'badge-custom':'badge-s'}">${isCustom?'CUSTOM':'SNACK'}</div>
+      </div>
+      <div class="meal-card-body">
+        <div class="macros">
+          <div class="macro"><strong>${s.protein}g</strong> protein</div>
+          <div class="macro"><strong>${s.calories}</strong> kcal</div>
+          ${s.carbs?`<div class="macro"><strong>${s.carbs}g</strong> carbs</div>`:''}
+          ${s.fat?`<div class="macro"><strong>${s.fat}g</strong> fat</div>`:''}
+        </div>
+        ${ings?`<div class="sub-label">Ingredients</div><div class="ing-list">${ings}</div>`:''}
+        ${s.method?`<div class="sub-label">Make it</div><div style="font-size:13px;color:var(--muted);line-height:1.6">${s.method}</div>`:''}
+        ${s.tip?`<div class="meal-tip">${s.tip}</div>`:''}
+      </div>
+    </div>`;
+  });
+  document.getElementById('snacksContent').innerHTML = html;
+}
+
+function renderCustomCard(b, type) {
+  return `<div class="meal-card" id="${type}_${b.id}" style="border-color:#c8e6ff">
+    <button class="delete-recipe-btn" onclick="deleteCustomRecipe('${type}','${b.id}')">✕</button>
+    <div class="meal-card-header">
+      <div class="meal-card-title">${b.name}</div>
+      <div class="meal-badge badge-custom">CUSTOM</div>
+    </div>
+    <div class="meal-card-body">
+      <div class="macros">
+        ${b.protein?`<div class="macro"><strong>${b.protein}g</strong> protein</div>`:''}
+        ${b.calories?`<div class="macro"><strong>${b.calories}</strong> kcal</div>`:''}
+      </div>
+      ${b.ingredients?`<div class="sub-label">Ingredients</div><div style="font-size:13px;color:var(--muted);line-height:1.7;white-space:pre-line">${b.ingredients}</div>`:''}
+      ${b.method?`<div class="sub-label">Method</div><div style="font-size:13px;color:var(--muted);line-height:1.6;white-space:pre-line">${b.method}</div>`:''}
+    </div>
+  </div>`;
+}
+
+// ─── CUSTOM RECIPES ─────────────────────────────────────────────────────────
+
+function saveCustomRecipe(type) {
+  if (type==='breakfast') {
+    const name = document.getElementById('bfName').value.trim();
+    if (!name) { alert('Please enter a recipe name'); return; }
+    const recipe = {
+      id: 'custom_bf_' + Date.now(),
+      name,
+      protein: parseInt(document.getElementById('bfProtein').value)||0,
+      calories: parseInt(document.getElementById('bfCalories').value)||0,
+      ingredients: document.getElementById('bfIngredients').value.trim(),
+      method: document.getElementById('bfMethod').value.trim(),
+      custom: true,
+    };
+    state.customBreakfasts.push(recipe);
+    document.getElementById('bfName').value='';
+    document.getElementById('bfProtein').value='';
+    document.getElementById('bfCalories').value='';
+    document.getElementById('bfIngredients').value='';
+    document.getElementById('bfMethod').value='';
+  } else {
+    const name = document.getElementById('snName').value.trim();
+    if (!name) { alert('Please enter a snack name'); return; }
+    const recipe = {
+      id: 'custom_sn_' + Date.now(),
+      name,
+      protein: parseInt(document.getElementById('snProtein').value)||0,
+      calories: parseInt(document.getElementById('snCalories').value)||0,
+      method: document.getElementById('snMethod').value.trim(),
+      custom: true,
+    };
+    state.customSnacks.push(recipe);
+    document.getElementById('snName').value='';
+    document.getElementById('snProtein').value='';
+    document.getElementById('snCalories').value='';
+    document.getElementById('snMethod').value='';
+  }
+  saveState();
+  renderBreakfastTab();
+  renderSnacksTab();
+  renderSetup(); // refresh breakfast options
+}
+
+function deleteCustomRecipe(type, id) {
+  if (!confirm('Remove this recipe?')) return;
+  if (type==='breakfast') state.customBreakfasts = state.customBreakfasts.filter(b=>b.id!==id);
+  else state.customSnacks = state.customSnacks.filter(s=>s.id!==id);
+  if (state.breakfast===id) { state.breakfast=null; saveState(); renderSetup(); }
+  saveState();
+  renderBreakfastTab();
+  renderSnacksTab();
+}
+
+// ─── TABS & INIT ─────────────────────────────────────────────────────────────
+
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-section').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Init
+loadState();
+if (state.view==='checklist' && state.activeTasks.length) {
+  renderChecklist();
+} else {
+  renderSetup();
+}
+renderBreakfastTab();
+renderSnacksTab();
 </script>
 </body>
 </html>
