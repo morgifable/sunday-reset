@@ -201,7 +201,26 @@
 
     <div class="section-label" style="margin-top:24px">Add your own breakfast recipe</div>
     <div class="add-recipe-form">
-      <h4>➕ New breakfast idea</h4>
+      <h4>➕ Import from a link</h4>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Paste any recipe URL — MyFitnessPal, BBC Good Food, a food blog, anywhere. Claude will fetch and auto-fill the details.</p>
+      <div class="form-field">
+        <label>Recipe URL</label>
+        <div style="display:flex;gap:8px">
+          <input type="url" id="bfUrl" placeholder="https://www.myfitnesspal.com/recipe/..." style="flex:1">
+          <button onclick="importRecipeFromUrl('breakfast')" id="bfImportBtn" style="padding:9px 14px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Epilogue',sans-serif">Import</button>
+        </div>
+      </div>
+      <div id="bfImportStatus" style="display:none;font-size:12px;padding:8px 10px;border-radius:7px;margin-bottom:10px"></div>
+      <div id="bfSwapsPanel" style="display:none;margin-bottom:12px;background:var(--gold-light);border-radius:10px;padding:12px 14px">
+        <div style="font-size:12px;font-weight:700;color:#7a5c10;margin-bottom:8px">💡 Smart swaps to boost protein & fibre, cut calories</div>
+        <div id="bfSwapsContent" style="font-size:13px;color:#7a5c10;line-height:1.7"></div>
+        <button onclick="applySwapsToForm('breakfast')" style="margin-top:10px;padding:7px 12px;background:#c9a84c;color:white;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Epilogue',sans-serif">Apply swaps to recipe</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin:12px 0 10px">
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+        <span style="font-size:11px;color:var(--soft)">or fill in manually</span>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
       <div class="form-field">
         <label>Recipe name</label>
         <input type="text" id="bfName" placeholder="e.g. Egg white omelette with veg">
@@ -214,6 +233,16 @@
         <div class="form-field">
           <label>Calories</label>
           <input type="number" id="bfCalories" placeholder="e.g. 350">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Carbs (g)</label>
+          <input type="number" id="bfCarbs" placeholder="e.g. 40">
+        </div>
+        <div class="form-field">
+          <label>Fat (g)</label>
+          <input type="number" id="bfFat" placeholder="e.g. 12">
         </div>
       </div>
       <div class="form-field">
@@ -234,7 +263,26 @@
 
     <div class="section-label" style="margin-top:24px">Add your own snack idea</div>
     <div class="add-recipe-form">
-      <h4>➕ New snack idea</h4>
+      <h4>➕ Import from a link</h4>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Paste any recipe URL — MyFitnessPal, a food blog, anywhere — and Claude will auto-fill the details.</p>
+      <div class="form-field">
+        <label>Recipe URL</label>
+        <div style="display:flex;gap:8px">
+          <input type="url" id="snUrl" placeholder="https://www.myfitnesspal.com/recipe/..." style="flex:1">
+          <button onclick="importRecipeFromUrl('snack')" id="snImportBtn" style="padding:9px 14px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Epilogue',sans-serif">Import</button>
+        </div>
+      </div>
+      <div id="snImportStatus" style="display:none;font-size:12px;padding:8px 10px;border-radius:7px;margin-bottom:10px"></div>
+      <div id="snSwapsPanel" style="display:none;margin-bottom:12px;background:var(--gold-light);border-radius:10px;padding:12px 14px">
+        <div style="font-size:12px;font-weight:700;color:#7a5c10;margin-bottom:8px">💡 Smart swaps to boost protein & fibre, cut calories</div>
+        <div id="snSwapsContent" style="font-size:13px;color:#7a5c10;line-height:1.7"></div>
+        <button onclick="applySwapsToForm('snack')" style="margin-top:10px;padding:7px 12px;background:#c9a84c;color:white;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Epilogue',sans-serif">Apply swaps to recipe</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin:12px 0 10px">
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+        <span style="font-size:11px;color:var(--soft)">or fill in manually</span>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
       <div class="form-field">
         <label>Snack name</label>
         <input type="text" id="snName" placeholder="e.g. Rice cakes with PB2">
@@ -247,6 +295,16 @@
         <div class="form-field">
           <label>Calories</label>
           <input type="number" id="snCalories" placeholder="e.g. 200">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Carbs (g)</label>
+          <input type="number" id="snCarbs" placeholder="e.g. 25">
+        </div>
+        <div class="form-field">
+          <label>Fat (g)</label>
+          <input type="number" id="snFat" placeholder="e.g. 6">
         </div>
       </div>
       <div class="form-field">
@@ -356,6 +414,10 @@ let state = {
 
 function loadState() {
   try {
+    // Restore permanently saved custom tasks
+    const customTasks = JSON.parse(localStorage.getItem('sunday_custom_tasks') || '{}');
+    Object.entries(customTasks).forEach(([id, task]) => { ALL_TASKS[id] = task; });
+
     const s = JSON.parse(localStorage.getItem('sunday_state') || '{}');
     if (s.customBreakfasts) state.customBreakfasts = s.customBreakfasts;
     if (s.customSnacks) state.customSnacks = s.customSnacks;
@@ -422,9 +484,11 @@ function renderSetup() {
       const rows = keys.map(k => {
         const t = ALL_TASKS[k];
         const on = sel.tasks.has(k);
-        return `<div class="toggle-item ${on?'on':'off'}" onclick="toggleTask('${k}')">
+        const isCustom = k.startsWith('custom_task_');
+        return `<div class="toggle-item ${on?'on':'off'}" onclick="toggleTask('${k}')" style="position:relative">
           <span class="ti-text">${t.text}</span>
           <div class="ti-switch"><div class="ti-knob"></div></div>
+          ${isCustom ? `<button onclick="event.stopPropagation();permanentlyDeleteTask('${k}')" style="margin-left:6px;width:20px;height:20px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0" title="Delete permanently">✕</button>` : ''}
         </div>`;
       }).join('');
       return `<div style="margin-bottom:14px">
@@ -444,8 +508,37 @@ function renderSetup() {
           <h3>This week's checklist ✅</h3>
           <p>Toggle tasks on or off — only what you actually need this week.</p>
           ${breakfastPrepNote}
-          <div class="multi-note">Tap to include or exclude each task</div>
+          <div class="multi-note">Tap to include or exclude. Long-press the ✕ to permanently delete a task.</div>
           ${taskToggles}
+          <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px">
+            <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">➕ Add a custom task</div>
+            <div style="display:flex;gap:8px;margin-bottom:6px">
+              <input type="text" id="customTaskText" placeholder="e.g. Prep overnight oats for the week" style="flex:1;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);font-size:13px;color:var(--text);font-family:'Epilogue',sans-serif;outline:none">
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <select id="customTaskPhase" style="flex:1;min-width:120px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);font-size:12px;color:var(--text);font-family:'Epilogue',sans-serif;outline:none">
+                <option value="kitchen">🍳 Kitchen prep</option>
+                <option value="fridge">🥗 Fridge setup</option>
+                <option value="remove">🚫 Remove friction</option>
+                <option value="gym">👟 Gym & movement</option>
+                <option value="mind">🧠 Mind & week</option>
+              </select>
+              <select id="customTaskTag" style="flex:1;min-width:100px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);font-size:12px;color:var(--text);font-family:'Epilogue',sans-serif;outline:none">
+                <option value="easy">EASY ↑</option>
+                <option value="hard">HARD ↑</option>
+                <option value="mind">MIND</option>
+              </select>
+            </div>
+            <input type="text" id="customTaskSub" placeholder="Optional: brief description or tip" style="width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);font-size:13px;color:var(--text);font-family:'Epilogue',sans-serif;outline:none;margin-bottom:8px">
+            <button onclick="addCustomTask()" style="width:100%;padding:9px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Epilogue',sans-serif">Save task permanently</button>
+          </div>
+        </div>
+        <div class="setup-card" style="border:1.5px dashed #c8e6ff;background:#f5faff">
+          <h3 style="color:#1a3a5c">✨ Get AI habit suggestions</h3>
+          <p style="color:#4a6a8c">Based on your goals (body recomp, 14k steps, 1,700 kcal, protein target), Claude will suggest new Sunday habits to make your week even easier.</p>
+          <button onclick="getHabitSuggestions()" id="habitSuggestBtn" style="width:100%;padding:10px;background:#1a3a5c;color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Epilogue',sans-serif">Suggest new habits for me</button>
+          <div id="habitSuggestStatus" style="display:none;margin-top:10px;font-size:12px;padding:8px 10px;border-radius:7px"></div>
+          <div id="habitSuggestResults" style="display:none;margin-top:10px"></div>
         </div>
         <button class="start-btn" id="startBtn" onclick="startChecklist()" ${!sel.breakfast?'disabled':''}>
           ${sel.breakfast ? `Build my Sunday Reset (${sel.tasks.size + 1} tasks)` : 'Choose a breakfast first'}
@@ -504,13 +597,14 @@ function renderChecklist() {
       const tagClass = t.tag==='hard'?'tag-hard':t.tag==='mind'?'tag-mind':'tag-easy';
       const tagLabel = t.tag==='hard'?'HARD ↑':t.tag==='mind'?'MIND':'EASY ↑';
       const tipHTML = t.tip ? `<div class="item-tip${t.tipWarn?' warn':''}">${t.tip}</div>` : '';
-      return `<div class="item${isDone?' done':''}${t.remove?' remove-item':''}" data-id="${k}" onclick="toggleItem(this)">
+      return `<div class="item${isDone?' done':''}${t.remove?' remove-item':''}" data-id="${k}" onclick="toggleItem(this)" style="position:relative">
         <div class="check"><span class="check-icon">✓</span></div>
         <div class="item-content">
           <div class="item-top"><div class="item-text">${t.text}</div><div class="item-tag ${tagClass}">${tagLabel}</div></div>
-          <div class="item-sub">${t.sub}</div>
+          <div class="item-sub">${t.sub||''}</div>
           ${tipHTML}
         </div>
+        <button onclick="event.stopPropagation();permanentlyDeleteTask('${k}')" title="Remove permanently" style="width:20px;height:20px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--soft);font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">✕</button>
       </div>`;
     }).join('');
     return `<div class="phase">
@@ -718,6 +812,8 @@ function saveCustomRecipe(type) {
       name,
       protein: parseInt(document.getElementById('bfProtein').value)||0,
       calories: parseInt(document.getElementById('bfCalories').value)||0,
+      carbs: parseInt(document.getElementById('bfCarbs').value)||null,
+      fat: parseInt(document.getElementById('bfFat').value)||null,
       ingredients: document.getElementById('bfIngredients').value.trim(),
       method: document.getElementById('bfMethod').value.trim(),
       custom: true,
@@ -726,8 +822,11 @@ function saveCustomRecipe(type) {
     document.getElementById('bfName').value='';
     document.getElementById('bfProtein').value='';
     document.getElementById('bfCalories').value='';
+    document.getElementById('bfCarbs').value='';
+    document.getElementById('bfFat').value='';
     document.getElementById('bfIngredients').value='';
     document.getElementById('bfMethod').value='';
+    document.getElementById('bfImportStatus').style.display='none';
   } else {
     const name = document.getElementById('snName').value.trim();
     if (!name) { alert('Please enter a snack name'); return; }
@@ -736,6 +835,8 @@ function saveCustomRecipe(type) {
       name,
       protein: parseInt(document.getElementById('snProtein').value)||0,
       calories: parseInt(document.getElementById('snCalories').value)||0,
+      carbs: parseInt(document.getElementById('snCarbs').value)||null,
+      fat: parseInt(document.getElementById('snFat').value)||null,
       method: document.getElementById('snMethod').value.trim(),
       custom: true,
     };
@@ -743,12 +844,15 @@ function saveCustomRecipe(type) {
     document.getElementById('snName').value='';
     document.getElementById('snProtein').value='';
     document.getElementById('snCalories').value='';
+    document.getElementById('snCarbs').value='';
+    document.getElementById('snFat').value='';
     document.getElementById('snMethod').value='';
+    document.getElementById('snImportStatus').style.display='none';
   }
   saveState();
   renderBreakfastTab();
   renderSnacksTab();
-  renderSetup(); // refresh breakfast options
+  renderSetup();
 }
 
 function deleteCustomRecipe(type, id) {
@@ -759,6 +863,284 @@ function deleteCustomRecipe(type, id) {
   saveState();
   renderBreakfastTab();
   renderSnacksTab();
+}
+
+// ─── URL IMPORT ─────────────────────────────────────────────────────────────
+
+async function importRecipeFromUrl(type) {
+  const urlField = type === 'breakfast' ? document.getElementById('bfUrl') : document.getElementById('snUrl');
+  const statusEl = type === 'breakfast' ? document.getElementById('bfImportStatus') : document.getElementById('snImportStatus');
+  const importBtn = type === 'breakfast' ? document.getElementById('bfImportBtn') : document.getElementById('snImportBtn');
+  const url = urlField.value.trim();
+
+  if (!url || !url.startsWith('http')) {
+    showImportStatus(statusEl, 'error', 'Please paste a valid URL starting with https://');
+    return;
+  }
+
+  importBtn.disabled = true;
+  importBtn.textContent = 'Fetching...';
+  showImportStatus(statusEl, 'loading', '⏳ Fetching recipe from URL...');
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        system: `You are a recipe parser. The user will give you a URL. Use web_search to find the recipe at that URL or search for it by URL/title. Extract the recipe details and return ONLY a JSON object with no other text, markdown, or explanation. The JSON must have these exact keys: name (string), protein (number in grams or null), calories (number or null), carbs (number in grams or null), fat (number in grams or null), ingredients (string, one ingredient per line), method (string, concise prep and cooking steps suitable for meal prep). If you cannot find a specific value set it to null. Never include backticks or markdown.`,
+        messages: [{ role: 'user', content: `Parse this recipe URL and return JSON only: ${url}` }]
+      })
+    });
+
+    const data = await response.json();
+
+    // Extract text from response — may include tool use blocks
+    let text = '';
+    if (data.content) {
+      for (const block of data.content) {
+        if (block.type === 'text') text += block.text;
+      }
+    }
+
+    // Strip any accidental markdown fences
+    text = text.replace(/```json|```/g, '').trim();
+
+    let recipe;
+    try {
+      recipe = JSON.parse(text);
+    } catch(e) {
+      // Try to extract JSON object from the text
+      const match = text.match(/\{[\s\S]*\}/);
+      if (match) recipe = JSON.parse(match[0]);
+      else throw new Error('Could not parse recipe JSON');
+    }
+
+    // Fill in the form fields
+    if (type === 'breakfast') {
+      if (recipe.name) document.getElementById('bfName').value = recipe.name;
+      if (recipe.protein) document.getElementById('bfProtein').value = recipe.protein;
+      if (recipe.calories) document.getElementById('bfCalories').value = recipe.calories;
+      if (recipe.carbs) document.getElementById('bfCarbs').value = recipe.carbs;
+      if (recipe.fat) document.getElementById('bfFat').value = recipe.fat;
+      if (recipe.ingredients) document.getElementById('bfIngredients').value = recipe.ingredients;
+      if (recipe.method) document.getElementById('bfMethod').value = recipe.method;
+    } else {
+      if (recipe.name) document.getElementById('snName').value = recipe.name;
+      if (recipe.protein) document.getElementById('snProtein').value = recipe.protein;
+      if (recipe.calories) document.getElementById('snCalories').value = recipe.calories;
+      if (recipe.carbs) document.getElementById('snCarbs').value = recipe.carbs;
+      if (recipe.fat) document.getElementById('snFat').value = recipe.fat;
+      if (recipe.ingredients || recipe.method) {
+        const combined = [recipe.ingredients, recipe.method].filter(Boolean).join('\n\n');
+        document.getElementById('snMethod').value = combined;
+      }
+    }
+
+    const filled = [recipe.name, recipe.protein, recipe.calories, recipe.ingredients].filter(Boolean).length;
+    if (filled >= 2) {
+      showImportStatus(statusEl, 'success', `✅ Recipe imported — review the fields below, then save.`);
+      urlField.value = '';
+      // Auto-trigger smart swaps
+      getSmartSwaps(type, recipe);
+    } else {
+      showImportStatus(statusEl, 'warn', '⚠️ Partial import — some fields could not be found. Fill in any blanks manually.');
+    }
+
+  } catch(err) {
+    showImportStatus(statusEl, 'error', '❌ Could not fetch this URL. Try copying the recipe details manually instead.');
+    console.error('Import error:', err);
+  }
+
+  importBtn.disabled = false;
+  importBtn.textContent = 'Import';
+}
+
+function showImportStatus(el, type, msg) {
+  el.style.display = 'block';
+  el.textContent = msg;
+  if (type === 'success') { el.style.background = 'var(--accent-light)'; el.style.color = 'var(--accent)'; }
+  else if (type === 'error') { el.style.background = 'var(--accent2-light)'; el.style.color = 'var(--accent2)'; }
+  else if (type === 'warn') { el.style.background = 'var(--gold-light)'; el.style.color = '#7a5c10'; }
+  else { el.style.background = 'var(--surface2)'; el.style.color = 'var(--muted)'; }
+}
+
+// ─── SMART SWAPS ────────────────────────────────────────────────────────────
+
+let pendingSwaps = { breakfast: null, snack: null };
+
+async function getSmartSwaps(type, recipe) {
+  const swapsPanel = document.getElementById(type==='breakfast'?'bfSwapsPanel':'snSwapsPanel');
+  const swapsContent = document.getElementById(type==='breakfast'?'bfSwapsContent':'snSwapsContent');
+
+  swapsPanel.style.display = 'block';
+  swapsContent.innerHTML = '⏳ Analysing recipe...';
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        system: `You are a nutrition coach helping someone doing body recomposition. Their goals: lose fat, build muscle, target 1,700 kcal/day, 125–145g protein/day, high fibre. Suggest 3–4 specific ingredient swaps to make the recipe higher protein, higher fibre, and/or lower calorie without ruining the dish. Be very specific: name the original ingredient, the swap, and the benefit. Also provide the updated recipe with swaps applied as a JSON field. Return ONLY valid JSON with keys: swaps (array of {original, swap, benefit}), updatedIngredients (string), updatedMethod (string, only if changed), estimatedProtein (number or null), estimatedCalories (number or null). No markdown, no extra text.`,
+        messages: [{ role:'user', content: `Recipe: ${JSON.stringify(recipe)}` }]
+      })
+    });
+
+    const data = await response.json();
+    let text = data.content?.filter(b=>b.type==='text').map(b=>b.text).join('') || '';
+    text = text.replace(/```json|```/g,'').trim();
+    const result = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || text);
+
+    pendingSwaps[type] = result;
+
+    const swapHTML = result.swaps.map(s =>
+      `<div style="padding:5px 0;border-bottom:1px solid rgba(201,168,76,.2)">
+        <span style="text-decoration:line-through;opacity:.6">${s.original}</span> → <strong>${s.swap}</strong><br>
+        <span style="font-size:11px;opacity:.8">${s.benefit}</span>
+      </div>`
+    ).join('');
+
+    const macroLine = [
+      result.estimatedProtein ? `~${result.estimatedProtein}g protein` : null,
+      result.estimatedCalories ? `~${result.estimatedCalories} kcal` : null
+    ].filter(Boolean).join(' · ');
+
+    swapsContent.innerHTML = swapHTML + (macroLine ? `<div style="margin-top:8px;font-weight:600;font-size:12px">${macroLine} after swaps</div>` : '');
+
+  } catch(e) {
+    swapsContent.innerHTML = '⚠️ Could not generate swaps. Check the recipe details and try again.';
+    console.error('Swaps error:', e);
+  }
+}
+
+function applySwapsToForm(type) {
+  const swaps = pendingSwaps[type];
+  if (!swaps) return;
+  if (type==='breakfast') {
+    if (swaps.updatedIngredients) document.getElementById('bfIngredients').value = swaps.updatedIngredients;
+    if (swaps.updatedMethod) document.getElementById('bfMethod').value = swaps.updatedMethod;
+    if (swaps.estimatedProtein) document.getElementById('bfProtein').value = swaps.estimatedProtein;
+    if (swaps.estimatedCalories) document.getElementById('bfCalories').value = swaps.estimatedCalories;
+  } else {
+    if (swaps.updatedIngredients) document.getElementById('snMethod').value = swaps.updatedIngredients + (swaps.updatedMethod ? '\n\n' + swaps.updatedMethod : '');
+    if (swaps.estimatedProtein) document.getElementById('snProtein').value = swaps.estimatedProtein;
+    if (swaps.estimatedCalories) document.getElementById('snCalories').value = swaps.estimatedCalories;
+  }
+  document.getElementById(type==='breakfast'?'bfSwapsPanel':'snSwapsPanel').style.display='none';
+}
+
+// ─── CUSTOM TASKS ────────────────────────────────────────────────────────────
+
+function addCustomTask() {
+  const text = document.getElementById('customTaskText').value.trim();
+  if (!text) { alert('Please enter a task name'); return; }
+  const phase = document.getElementById('customTaskPhase').value;
+  const tag = document.getElementById('customTaskTag').value;
+  const sub = document.getElementById('customTaskSub').value.trim();
+  const id = 'custom_task_' + Date.now();
+  ALL_TASKS[id] = { phase, text, sub, tag, custom: true };
+  // Save custom tasks list permanently
+  const saved = JSON.parse(localStorage.getItem('sunday_custom_tasks') || '{}');
+  saved[id] = ALL_TASKS[id];
+  localStorage.setItem('sunday_custom_tasks', JSON.stringify(saved));
+  document.getElementById('customTaskText').value='';
+  document.getElementById('customTaskSub').value='';
+  renderSetup();
+}
+
+function permanentlyDeleteTask(id) {
+  if (!confirm(`Remove "${ALL_TASKS[id]?.text}" permanently from your list?`)) return;
+  delete ALL_TASKS[id];
+  // Remove from custom tasks storage
+  const saved = JSON.parse(localStorage.getItem('sunday_custom_tasks') || '{}');
+  delete saved[id];
+  localStorage.setItem('sunday_custom_tasks', JSON.stringify(saved));
+  // Remove from active tasks if present
+  state.activeTasks = state.activeTasks.filter(k=>k!==id);
+  state.done.delete(id);
+  saveState();
+  // Re-render whichever view is active
+  if (state.view==='checklist') renderChecklist();
+  else renderSetup();
+}
+
+// ─── AI HABIT SUGGESTIONS ────────────────────────────────────────────────────
+
+async function getHabitSuggestions() {
+  const btn = document.getElementById('habitSuggestBtn');
+  const status = document.getElementById('habitSuggestStatus');
+  const results = document.getElementById('habitSuggestResults');
+
+  btn.disabled = true;
+  btn.textContent = 'Thinking...';
+  status.style.display='block';
+  status.style.background='var(--surface2)';
+  status.style.color='var(--muted)';
+  status.textContent='⏳ Generating personalised suggestions...';
+  results.style.display='none';
+
+  const existingTasks = Object.values(ALL_TASKS).map(t=>t.text).join(', ');
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 900,
+        system: `You are a health and habit coach. Suggest Sunday reset habits that would genuinely help this person have an easier, healthier week. Be specific, practical and brief. Return ONLY valid JSON — an array of 5 objects each with: text (the task, max 10 words), phase (one of: kitchen, fridge, remove, gym, mind), tag (one of: easy, hard, mind), sub (1 sentence description), why (1 sentence on why it helps this person specifically). No markdown, no extra text.`,
+        messages: [{ role:'user', content: `Person's profile: female, body recomp goal, 65.8kg, 26.3% body fat, target 1,700 kcal/day, 125–145g protein, 14k steps daily (2 break walks), 3x gym per week, desk job, afternoon sweet cravings, meal prepping on Sundays. Already doing: ${existingTasks}. Suggest 5 NEW Sunday habits not already on the list that would make their week easier.` }]
+      })
+    });
+
+    const data = await response.json();
+    let text = data.content?.filter(b=>b.type==='text').map(b=>b.text).join('') || '';
+    text = text.replace(/```json|```/g,'').trim();
+    const match = text.match(/\[[\s\S]*\]/);
+    const suggestions = JSON.parse(match ? match[0] : text);
+
+    status.style.display='none';
+    results.style.display='block';
+    results.innerHTML = suggestions.map((s,i) => `
+      <div style="background:white;border:1px solid #c8e6ff;border-radius:10px;padding:11px 13px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px">${s.text}</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:3px">${s.sub}</div>
+          <div style="font-size:11px;color:#4a6a8c;font-style:italic">${s.why}</div>
+        </div>
+        <button onclick="addSuggestedTask(${i})" data-idx="${i}" style="padding:5px 10px;background:#1a3a5c;color:white;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Epilogue',sans-serif;flex-shrink:0">Add</button>
+      </div>`).join('');
+
+    // Store suggestions for adding
+    window._habitSuggestions = suggestions;
+
+  } catch(e) {
+    status.textContent = '❌ Could not generate suggestions. Try again.';
+    status.style.background='var(--accent2-light)';
+    status.style.color='var(--accent2)';
+    console.error('Habit suggestions error:', e);
+  }
+
+  btn.disabled=false;
+  btn.textContent='Suggest new habits for me';
+}
+
+function addSuggestedTask(idx) {
+  const s = window._habitSuggestions?.[idx];
+  if (!s) return;
+  const id = 'custom_task_' + Date.now();
+  ALL_TASKS[id] = { phase:s.phase||'mind', text:s.text, sub:s.sub, tag:s.tag||'easy', custom:true };
+  const saved = JSON.parse(localStorage.getItem('sunday_custom_tasks') || '{}');
+  saved[id] = ALL_TASKS[id];
+  localStorage.setItem('sunday_custom_tasks', JSON.stringify(saved));
+  // Mark the button as added
+  const btn = document.querySelector(`[data-idx="${idx}"]`);
+  if (btn) { btn.textContent='Added ✓'; btn.disabled=true; btn.style.background='var(--accent)'; }
+  renderSetup();
 }
 
 // ─── TABS & INIT ─────────────────────────────────────────────────────────────
